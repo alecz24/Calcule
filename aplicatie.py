@@ -14,17 +14,23 @@ Mt = st.number_input("Momentul de torsiune Mt (Nmm)", value=1.5e6, format="%.2f"
 Ta = st.number_input("Tensiunea admisibilă Ta (N/mm²)", value=80.0)
 K = st.number_input("Raportul K = Dext / d", value=0.8, format="%.2f")
 
-# Calcul conform MATLAB
-Wpnec = Mt / Ta  # mm³
+# --- CALCULE ---
+Wpnec = Mt / Ta
 factor = 1 - (1 / K)**4
-Dext = ((16 * Wpnec) / (np.pi * factor))**(1/3)
-d = Dext / K
 
-# Afișare rezultate
-st.subheader("Rezultate torsiune:")
-st.write(f"**Wpnec (modul de rezistență):** {Wpnec:.2f} mm³")
-st.write(f"**Dext (diametrul exterior):** {Dext:.2f} mm")
-st.write(f"**d (diametrul interior):** {d:.2f} mm")
+if factor <= 0:
+    st.error("Eroare: factor negativ. Verifică dacă raportul K = Dext/d este mai mare decât 1.")
+    Dext = 0
+    d = 0
+else:
+    Dext = np.real(((16 * Wpnec) / (np.pi * factor))**(1/3))
+    d = Dext / K
+
+    # --- AFIȘARE ---
+    st.subheader("Rezultate torsiune:")
+    st.write(f"**Wpnec (modul de rezistență):** {Wpnec:.2f} mm³")
+    st.write(f"**Dext (diametrul exterior):** {Dext:.2f} mm")
+    st.write(f"**d (diametrul interior):** {d:.2f} mm")
 
 # =======================
 # === 2. RADIATOR ===
@@ -110,4 +116,4 @@ st.pyplot(fig)
 # =======================
 # === FINAL ===
 # =======================
-st.caption("Această aplicație folosește calcule compatibile cu MATLAB pentru torsiune și estimează dimensiunile radiatorului.")
+st.caption("Această aplicație folosește calcule compatibile cu MATLAB pentru torsiune și estimează dimensiunile radiatorului. Numerele complexe sunt eliminate pentru claritate.")
