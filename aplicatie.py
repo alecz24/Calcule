@@ -12,25 +12,24 @@ st.header("1. Parametrii pentru torsiune")
 
 Mt = st.number_input("Momentul de torsiune Mt (Nmm)", value=1.5e6, format="%.2f")
 Ta = st.number_input("Tensiunea admisibilă Ta (N/mm²)", value=80.0)
-K = st.number_input("Raportul K = Dext / d", value=0.8, format="%.2f")
+K = st.number_input("Raportul K = d / Dext (K < 1)", value=0.8, format="%.2f", min_value=0.01, max_value=0.99)
 
 # --- CALCULE ---
 Wpnec = Mt / Ta
-factor = 1 - (1 / K)**4
+factor = 1 - K**4
 
 if factor <= 0:
-    st.error("Eroare: factor negativ. Verifică dacă raportul K = Dext/d este mai mare decât 1.")
-    Dext = 0
+    st.error("Eroare: factorul este negativ. Verifică ca K să fie între 0 și 1.")
     d = 0
+    Dext = 0
 else:
-    Dext = np.real(((16 * Wpnec) / (np.pi * factor))**(1/3))
-    d = Dext / K
+    d = np.real(((16 * Wpnec) / (np.pi * factor))**(1/3))
+    Dext = d / K
 
-    # --- AFIȘARE ---
     st.subheader("Rezultate torsiune:")
     st.write(f"**Wpnec (modul de rezistență):** {Wpnec:.2f} mm³")
-    st.write(f"**Dext (diametrul exterior):** {Dext:.2f} mm")
     st.write(f"**d (diametrul interior):** {d:.2f} mm")
+    st.write(f"**Dext (diametrul exterior):** {Dext:.2f} mm")
 
 # =======================
 # === 2. RADIATOR ===
@@ -99,7 +98,7 @@ st.write(f"**Dimensiuni radiator:** Lungime: {L_mm:.2f} mm, Lățime: {W_mm:.2f}
 # =======================
 st.subheader("3. Reprezentare schematică radiator")
 
-fig, ax = plt.subplots(figsize=(3, 4))  # dimensiune mai mică
+fig, ax = plt.subplots(figsize=(3, 4))
 
 ax.set_xlim(0, W_mm)
 ax.set_ylim(0, L_mm)
@@ -113,7 +112,4 @@ ax.axis('off')
 
 st.pyplot(fig)
 
-# =======================
-# === FINAL ===
-# =======================
-st.caption("Această aplicație folosește calcule compatibile cu MATLAB pentru torsiune și estimează dimensiunile radiatorului. Numerele complexe sunt eliminate pentru claritate.")
+st.caption("Calculele respectă constrângerile fizice: d < Dext (interior mai mic decât exterior).")
