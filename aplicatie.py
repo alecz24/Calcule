@@ -87,7 +87,7 @@ st.write(f"**Dimensiuni radiator:** Lungime: {L_mm:.2f} mm, Lățime: {W_mm:.2f}
 
 # --- DESEN ---
 st.subheader("3. Reprezentare dimensiuni radiator")
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(figsize=(3, 4))
 
 ax.set_xlim(0, W_mm)
 ax.set_ylim(0, L_mm)
