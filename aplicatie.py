@@ -5,27 +5,27 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title="Calcul Torsiune și Radiator", layout="centered")
 st.title("Calcul Torsiune & Dimensiuni Radiator")
 
-# =======================
-# === 1. TORSIUNE ===
-# =======================
-st.header("1. Parametrii pentru torsiune")
+# === INPUTURI ===
+st.subheader("Introduceți datele:")
+Mt = st.number_input("Momentul de torsiune Mt (Nmm)", value=1.5e6, format="%.2f")
+Ta = st.number_input("Tensiunea admisibilă Ta (N/mm²)", value=80.0, format="%.2f")
+K = st.number_input("Raportul K = Dext / d", value=0.8, format="%.2f")
 
-Mt = st.number_input("Momentul de torsiune Mt (Nmm)", value=1.5e6, format="%.6f")
-Ta = st.number_input("Tensiunea admisibilă Ta (N/mm²)", value=80.0, format="%.6f")
-K = st.number_input("Raportul K = Dext / d", value=0.8, format="%.6f")
-
-# === CALCULE IDENTICE CU MATLAB ===
+# === CALCULE ===
 Wpnec = Mt / Ta
 factor = 1 - (1 / K)**4
+base = (16 * Wpnec) / (np.pi * factor)
 
-Dext = np.cbrt((16 * Wpnec) / (np.pi * factor))  # np.cbrt e cheia!
+# MATLAB-style cubic root
+Dext = np.real(base ** (1/3))
 d = Dext / K
 
-# === AFIȘARE EXACT CA ÎN MATLAB ===
-st.subheader("Rezultate torsiune (formule MATLAB):")
-st.code(f"Wpnec = {Wpnec:.6f} mm³")
-st.code(f"Dext  = {Dext:.6f} mm")
-st.code(f"d     = {d:.6f} mm")
+# === AFIȘARE ===
+st.subheader("Rezultate identice MATLAB:")
+st.code(f"Wpnec = {Wpnec:.2f} mm³")
+st.code(f"Dext  = {Dext:.2f} mm")
+st.code(f"d     = {d:.2f} mm")
+
 
 # =======================
 # === 2. RADIATOR ===
