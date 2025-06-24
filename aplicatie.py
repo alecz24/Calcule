@@ -10,26 +10,27 @@ st.title("Calcul Torsiune & Dimensiuni Radiator")
 # =======================
 st.header("1. Parametrii pentru torsiune")
 
-Mt = st.number_input("Momentul de torsiune Mt (Nmm)", value=1.5e6, format="%.2f")
-Ta = st.number_input("Tensiunea admisibilă Ta (N/mm²)", value=80.0)
-K = st.number_input("Raportul K = d / Dext (K < 1)", value=0.8, format="%.2f", min_value=0.01, max_value=0.99)
+Mt = st.number_input("Momentul de torsiune Mt (Nmm)", value=1.5e6, format="%.6f")
+Ta = st.number_input("Tensiunea admisibilă Ta (N/mm²)", value=80.0, format="%.6f")
+K = st.number_input("Raportul K = Dext / d", value=0.8, format="%.6f")
 
 # --- CALCULE ---
 Wpnec = Mt / Ta
-factor = 1 - K**4
+factor = 1 - (1 / K)**4
 
-if factor <= 0:
-    st.error("Eroare: factorul este negativ. Verifică ca K să fie între 0 și 1.")
-    d = 0
+if factor == 0:
+    st.error("Eroare: factorul este 0, imposibil de calculat.")
     Dext = 0
+    d = 0
 else:
-    d = np.real(((16 * Wpnec) / (np.pi * factor))**(1/3))
-    Dext = d / K
+    Dext_c = ((16 * Wpnec) / (np.pi * factor))**(1/3)
+    Dext = np.real(Dext_c)
+    d = Dext / K
 
-    st.subheader("Rezultate torsiune:")
-    st.write(f"**Wpnec (modul de rezistență):** {Wpnec:.2f} mm³")
-    st.write(f"**d (diametrul interior):** {d:.2f} mm")
-    st.write(f"**Dext (diametrul exterior):** {Dext:.2f} mm")
+    st.subheader("Rezultate torsiune (formule MATLAB):")
+    st.code(f"Wpnec = {Wpnec:.6f} mm³")
+    st.code(f"Dext  = {Dext:.6f} mm")
+    st.code(f"d     = {d:.6f} mm")
 
 # =======================
 # === 2. RADIATOR ===
