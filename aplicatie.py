@@ -7,9 +7,9 @@ st.title("Calcul Torsiune & Dimensiuni Radiator")
 
 # torsiune IMPUT partea 1
 st.subheader("Introduceți datele:")
-Mt = st.number_input("Momentul de torsiune Mt (Nmm)", value=1.5e6, format="%.2f")
-Ta = st.number_input("Tensiunea admisibilă Ta (N/mm²)", value=80.0, format="%.2f")
-K = st.number_input("Raportul K = Dext / d", value=0.8, format="%.2f")
+Mt = st.number_input("Momentul de torsiune Mt (Nmm)", value=1.5e6, step=5.0, format="%.2f")
+Ta = st.number_input("Tensiunea admisibilă Ta (N/mm²)", value=80.0, step=5.0, format="%.2f")
+K = st.number_input("Raportul K = Dext / d", value=0.8, step=5.0, format="%.2f")
 
 # calcule matlab
 Wpnec = Mt / Ta
@@ -28,7 +28,7 @@ st.code(f"Dext     = {d:.2f} mm")
 # radiator partea 2
 st.header("2. Parametrii pentru radiator")
 
-kw = st.number_input("Puterea motorului (kW)", value=50.0)
+kw = st.number_input("Puterea motorului (kW)", value=50.0, step=5.0)
 Q_total = kw * 1000  # W
 
 # Parametri
@@ -72,7 +72,7 @@ A_fizic_cm2 = A_fizic * 10000
 
 # Dimensiuni radiator
 
-W_mm = st.number_input("Lățimea radiatorului (mm)", value=200.0, step=5.0, format="%.0f")
+W_mm = st.number_input("Latimea radiatorului (mm)", value=200.0, step=5.0, format="%.0f")
 
 W = W_mm / 1000 
 D = 0.04
