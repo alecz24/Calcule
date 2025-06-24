@@ -5,37 +5,33 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title="Calcul Torsiune și Radiator", layout="centered")
 st.title("Calcul Torsiune & Dimensiuni Radiator")
 
-# === INPUTURI ===
+# torsiune IMPUT partea 1
 st.subheader("Introduceți datele:")
 Mt = st.number_input("Momentul de torsiune Mt (Nmm)", value=1.5e6, format="%.2f")
 Ta = st.number_input("Tensiunea admisibilă Ta (N/mm²)", value=80.0, format="%.2f")
 K = st.number_input("Raportul K = Dext / d", value=0.8, format="%.2f")
 
-# === CALCULE ===
+# calcule matlab
 Wpnec = Mt / Ta
 factor = 1 - (1 / K)**4
 base = (16 * Wpnec) / (np.pi * factor)
 
-# MATLAB-style cubic root
+# matlab sa nu fie negativ
 Dext = np.real(base ** (1/3))
 d = Dext / K
 
-# === AFIȘARE ===
 st.subheader("Rezultate identice MATLAB:")
 st.code(f"Wpnec = {Wpnec:.2f} mm³")
 st.code(f"d  = {Dext:.2f} mm")
 st.code(f"Dext     = {d:.2f} mm")
 
-
-# =======================
-# === 2. RADIATOR ===
-# =======================
+# radiator partea 2
 st.header("2. Parametrii pentru radiator")
 
 kw = st.number_input("Puterea motorului (kW)", value=50.0)
 Q_total = kw * 1000  # W
 
-# Parametri lichid
+# Parametri
 T_in = 95
 T_out = 70
 V_l = 0.00133
@@ -89,9 +85,8 @@ st.write(f"**Coef. de transfer ha:** {ha:.2f} W/m²K")
 st.write(f"**Suprafață fizică estimată:** {A_fizic_cm2:.2f} cm²")
 st.write(f"**Dimensiuni radiator:** Lungime: {L_mm:.2f} mm, Lățime: {W_mm:.2f} mm, Adâncime: {D_mm:.2f} mm")
 
-# =======================
-# === 3. GRAFIC ===
-# =======================
+# grafic, mai e de lucrat
+
 st.subheader("3. Reprezentare schematică radiator")
 
 fig, ax = plt.subplots(figsize=(3, 4))
