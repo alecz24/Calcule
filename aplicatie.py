@@ -71,13 +71,16 @@ A_fizic = A * 0.00028
 A_fizic_cm2 = A_fizic * 10000
 
 # Dimensiuni radiator
-W = 0.2  # m
-D = 0.04  # m
-L = A_fizic / W  # m
+
+W_mm = st.number_input("Lățimea radiatorului (mm)", value=200.0, step=5.0, format="%.0f")
+
+W = W_mm / 1000 
+D = 0.04
+L = A_fizic / W 
 
 L_mm = L * 1000
-W_mm = W * 1000
 D_mm = D * 1000
+
 
 st.subheader("Rezultate radiator:")
 st.write(f"**Rea (aer):** {Rea:.2f}")
@@ -85,7 +88,7 @@ st.write(f"**Coef. de transfer ha:** {ha:.2f} W/m²K")
 st.write(f"**Suprafață fizică estimată:** {A_fizic_cm2:.2f} cm²")
 st.write(f"**Dimensiuni radiator:** Lungime: {L_mm:.2f} mm, Lățime: {W_mm:.2f} mm, Adâncime: {D_mm:.2f} mm")
 
-# grafic, mai e de lucrat
+# grafic, mai e de lucrat, sa introduci latimea automat se modifica si lungimea si sa poti sa modifici din 5 in 5 nu din 0.01
 
 st.subheader("3. Reprezentare schematică radiator")
 
