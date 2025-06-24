@@ -14,23 +14,18 @@ Mt = st.number_input("Momentul de torsiune Mt (Nmm)", value=1.5e6, format="%.6f"
 Ta = st.number_input("Tensiunea admisibilă Ta (N/mm²)", value=80.0, format="%.6f")
 K = st.number_input("Raportul K = Dext / d", value=0.8, format="%.6f")
 
-# --- CALCULE ---
+# === CALCULE IDENTICE CU MATLAB ===
 Wpnec = Mt / Ta
 factor = 1 - (1 / K)**4
 
-if factor == 0:
-    st.error("Eroare: factorul este 0, imposibil de calculat.")
-    Dext = 0
-    d = 0
-else:
-    Dext_c = ((16 * Wpnec) / (np.pi * factor))**(1/3)
-    Dext = np.real(Dext_c)
-    d = Dext / K
+Dext = np.cbrt((16 * Wpnec) / (np.pi * factor))  # np.cbrt e cheia!
+d = Dext / K
 
-    st.subheader("Rezultate torsiune (formule MATLAB):")
-    st.code(f"Wpnec = {Wpnec:.6f} mm³")
-    st.code(f"Dext  = {Dext:.6f} mm")
-    st.code(f"d     = {d:.6f} mm")
+# === AFIȘARE EXACT CA ÎN MATLAB ===
+st.subheader("Rezultate torsiune (formule MATLAB):")
+st.code(f"Wpnec = {Wpnec:.6f} mm³")
+st.code(f"Dext  = {Dext:.6f} mm")
+st.code(f"d     = {d:.6f} mm")
 
 # =======================
 # === 2. RADIATOR ===
