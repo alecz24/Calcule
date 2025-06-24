@@ -23,8 +23,8 @@ d = Dext / K
 # === AFIȘARE ===
 st.subheader("Rezultate identice MATLAB:")
 st.code(f"Wpnec = {Wpnec:.2f} mm³")
-st.code(f"Dext  = {Dext:.2f} mm")
-st.code(f"d     = {d:.2f} mm")
+st.code(f"d  = {Dext:.2f} mm")
+st.code(f"Dext     = {d:.2f} mm")
 
 
 # =======================
